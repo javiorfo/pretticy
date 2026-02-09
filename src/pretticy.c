@@ -63,7 +63,6 @@ char *format_json(const char *json_string, size_t tab_space,
     size_t input_len = strlen(json_string);
     size_t max_pretty_length = input_len * multiply_max_length;
 
-    // Allocate the working buffer
     char *pretty_json = malloc(max_pretty_length);
     if (!pretty_json) return NULL;
 
@@ -112,8 +111,6 @@ char *format_json(const char *json_string, size_t tab_space,
         case '\t':
         case '\n':
         case '\r':
-            // Skip whitespace if not in a string (standard minified JSON
-            // cleanup)
             if (in_string) { pretty_json[index++] = c; }
             break;
 
@@ -128,10 +125,8 @@ char *format_json(const char *json_string, size_t tab_space,
         }
     }
 
-    // Null-terminate the string
     pretty_json[index] = '\0';
 
-    // Duplicate the string to a tight-fitting buffer (similar to dupe in Zig)
     char *result = strdup(pretty_json);
     free(pretty_json);
     return result;
